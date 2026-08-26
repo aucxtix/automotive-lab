@@ -97,11 +97,16 @@ function FrameCanvas({ car, hovered, mouseX }: { car: Car; hovered: boolean; mou
 
   // Smooth interpolation loop
   useEffect(() => {
+    let lastDrawn = -1;
     const loop = () => {
       const diff = targetFrame.current - currentFrame.current;
-      if (Math.abs(diff) > 0.3) {
+      if (Math.abs(diff) > 0.01) {
         currentFrame.current += diff * 0.18;
-        drawFrame(Math.round(currentFrame.current));
+        const current = Math.round(currentFrame.current);
+        if (current !== lastDrawn) {
+          drawFrame(current);
+          lastDrawn = current;
+        }
       }
       rafRef.current = requestAnimationFrame(loop);
     };

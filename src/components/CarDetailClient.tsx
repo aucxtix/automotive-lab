@@ -229,22 +229,57 @@ export default function CarDetailClient({ car }: { car: Car }) {
         </div>
       </section>
 
-      {/* NEXT CAR CTA */}
-      <section className="py-20 px-6 lg:px-12 border-t border-white/5">
-        <div className="max-w-screen-2xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-8">
-          <div>
-            <div className="font-mono text-[9px] tracking-[0.3em] text-zinc-400 mb-2">BACK TO</div>
-            <Link href="/#collection" data-cursor="expand" className="font-display font-bold text-2xl text-zinc-300 hover:text-white transition-colors duration-300">
-              THE COLLECTION
-            </Link>
+      {/* GRAND FINALE ENDING */}
+      <section className="relative py-32 px-6 lg:px-12 min-h-[50vh] flex flex-col items-center justify-center border-t border-white/5 overflow-hidden group">
+        <div className="absolute inset-0 bg-[#050505] transition-colors duration-700 group-hover:bg-[#080808]" />
+        
+        {/* Subtle background glow on hover */}
+        <div
+          className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-10 transition-opacity duration-700"
+          style={{ background: `radial-gradient(circle at center, ${accentColorHex} 0%, transparent 50%)` }}
+        />
+        
+        <div className="relative z-10 flex flex-col items-center text-center w-full">
+          <div className="flex items-center gap-3 mb-8">
+            <div className="w-8 h-px bg-white/10 group-hover:bg-white/30 transition-colors duration-500" />
+            <span className="font-mono text-[9px] tracking-[0.4em] text-zinc-500 group-hover:text-zinc-300 transition-colors duration-500">
+              EXPERIENCE CONCLUDED
+            </span>
+            <div className="w-8 h-px bg-white/10 group-hover:bg-white/30 transition-colors duration-500" />
           </div>
-          <Link
-            href="/"
-            data-cursor="expand"
-            className="flex items-center gap-3 px-6 py-3 border border-white/10 hover:border-white/25 transition-colors duration-300"
-          >
-            <span className="font-mono text-[10px] tracking-[0.3em] text-zinc-300">AUTOMOTIVE LAB</span>
+          
+          <Link href="/#collection" data-cursor="expand" className="relative block group/link">
+            {/* Outline Text */}
+            <h2 
+              className="font-display font-black text-transparent transition-all duration-500 group-hover/link:opacity-0"
+              style={{ 
+                fontSize: 'clamp(3rem, 12vw, 10rem)', 
+                lineHeight: 0.85, 
+                letterSpacing: '-0.04em',
+                WebkitTextStroke: '2px rgba(255,255,255,0.1)'
+              }}
+            >
+              RETURN TO<br/>COLLECTION
+            </h2>
+            
+            {/* Solid Glow Text */}
+            <h2 
+              className="absolute inset-0 font-display font-black opacity-0 scale-95 transition-all duration-700 group-hover/link:opacity-100 group-hover/link:scale-100"
+              style={{ 
+                fontSize: 'clamp(3rem, 12vw, 10rem)', 
+                lineHeight: 0.85, 
+                letterSpacing: '-0.04em',
+                color: accentColorHex,
+                textShadow: `0 0 100px ${accentColorHex}60`
+              }}
+            >
+              RETURN TO<br/>COLLECTION
+            </h2>
           </Link>
+          
+          <div className="mt-16 font-mono text-[8px] tracking-[0.5em] text-zinc-600">
+            AUTOMOTIVE LAB 2024
+          </div>
         </div>
       </section>
     </div>

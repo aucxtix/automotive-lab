@@ -17,6 +17,7 @@ export default function FrameSequence({ car }: FrameSequenceProps) {
   const targetFrameRef = useRef(0);
   const imageCache = useRef<Map<number, HTMLImageElement>>(new Map());
   const rafRef = useRef<number>(0);
+  const lastDrawnFrameRef = useRef(-1);
   const [currentFrameNum, setCurrentFrameNum] = useState(0);
   const [loaded, setLoaded] = useState(0);
   const [isExploded, setIsExploded] = useState(false);
@@ -62,11 +63,14 @@ export default function FrameSequence({ car }: FrameSequenceProps) {
 
   const animLoop = useCallback(() => {
     const diff = targetFrameRef.current - currentFrameRef.current;
-    if (Math.abs(diff) > 0.5) {
-      currentFrameRef.current += diff * 0.3; // Increased from 0.15 for faster catch-up
+    if (Math.abs(diff) > 0.01) {
+      currentFrameRef.current += diff * 0.3; // Fast catch-up
       const frame = Math.round(currentFrameRef.current);
-      drawFrame(frame);
-      setCurrentFrameNum(frame);
+      if (frame !== lastDrawnFrameRef.current) {
+        drawFrame(frame);
+        setCurrentFrameNum(frame);
+        lastDrawnFrameRef.current = frame;
+      }
     }
     rafRef.current = requestAnimationFrame(animLoop);
   }, [drawFrame]);
@@ -326,6 +330,55 @@ export default function FrameSequence({ car }: FrameSequenceProps) {
             ))}
           </div>
         )}
+
+        {/* Finale Mic-Drop Tagline (Appears at the very end of the scroll sequence) */}
+        <div 
+          className="absolute inset-0 pointer-events-none z-30 flex items-center justify-center transition-all duration-700"
+          style={{ 
+            opacity: progress > 0.95 ? 1 : 0,
+            transform: `scale(${progress > 0.95 ? 1 : 1.05})`,
+            background: progress > 0.95 ? `radial-gradient(circle at center, ${accentColor}15 0%, transparent 70%)` : 'transparent'
+          }}
+        >
+          <div className="text-center w-full px-6">
+            <h3 
+              className="font-display font-black text-transparent transition-all duration-1000 ease-out"
+              style={{
+                fontSize: 'clamp(2rem, 6vw, 6rem)',
+                lineHeight: 1,
+                letterSpacing: progress > 0.98 ? '0.02em' : '-0.02em',
+                WebkitTextStroke: `2px ${progress > 0.98 ? 'white' : accentColor}`,
+                textShadow: progress > 0.98 ? `0 0 120px ${accentColor}, 0 0 40px white` : 'none',
+                color: progress > 0.98 ? 'white' : 'transparent',
+                transform: `translateY(${progress > 0.98 ? '0' : '20px'})`
+              }}
+            >
+              {car.tagline.toUpperCase()}
+            </h3>
+            
+            <div 
+              className="mt-8 font-mono tracking-[0.6em] text-white/60 transition-all duration-1000 delay-300"
+              style={{ 
+                fontSize: 'clamp(8px, 1vw, 12px)',
+                opacity: progress > 0.98 ? 1 : 0, 
+                transform: `translateY(${progress > 0.98 ? '0' : '20px'})`,
+                textShadow: `0 0 20px ${accentColor}`
+              }}
+            >
+              ASSEMBLY COMPLETE
+            </div>
+            
+            {/* Cinematic flash effects */}
+            <div 
+              className="absolute inset-0 bg-white mix-blend-overlay transition-opacity duration-300"
+              style={{ opacity: (progress > 0.98 && progress < 0.99) ? 0.3 : 0 }}
+            />
+            <div 
+              className="absolute inset-0 bg-white mix-blend-overlay transition-opacity duration-150"
+              style={{ opacity: (progress > 0.99 && progress < 0.995) ? 0.5 : 0 }}
+            />
+          </div>
+        </div>
       </div>
 
       <style jsx>{`
